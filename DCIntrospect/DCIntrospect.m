@@ -533,7 +533,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 			if (self.currentViewHistory.count == 0)
 				return NO;
 			
-			int indexOfCurrentView = [self.currentViewHistory indexOfObject:self.currentView];
+			NSUInteger indexOfCurrentView = [self.currentViewHistory indexOfObject:self.currentView];
 			if (indexOfCurrentView == 0)
 			{
 				NSLog(@"DCIntrospect: At bottom of view history.");
@@ -1172,7 +1172,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	}
 	else if ([propertyName isEqualToString:@"autoresizingMask"])
 	{
-		UIViewAutoresizing mask = [value intValue];
+		UIViewAutoresizing mask = [value unsignedIntegerValue];
 		NSMutableString *string = [NSMutableString string];
 		if (mask & UIViewAutoresizingFlexibleLeftMargin)
 			[string appendString:@"UIViewAutoresizingFlexibleLeftMargin"];
@@ -1194,7 +1194,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	}
 	else if ([propertyName isEqualToString:@"accessibilityTraits"])
 	{
-		UIAccessibilityTraits traits = [value intValue];
+		UIAccessibilityTraits traits = [value unsignedLongLongValue];
 		NSMutableString *string = [NSMutableString string];
 		if (traits & UIAccessibilityTraitButton)
 			[string appendString:@"UIAccessibilityTraitButton"];
@@ -1445,7 +1445,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 			[objectString appendFormat:@"bounds: %@ | ", NSStringFromCGRect(view.bounds)];
 			[objectString appendFormat:@"center: %@\n", NSStringFromCGPoint(view.center)];
 			[objectString appendFormat:@"    transform: %@\n", NSStringFromCGAffineTransform(view.transform)];
-			[objectString appendFormat:@"    autoresizingMask: %@\n", [self describeProperty:@"autoresizingMask" value:[NSNumber numberWithInt:view.autoresizingMask]]];
+			[objectString appendFormat:@"    autoresizingMask: %@\n", [self describeProperty:@"autoresizingMask" value:[NSNumber numberWithUnsignedInteger:view.autoresizingMask]]];
 			[objectString appendFormat:@"    autoresizesSubviews: %@\n", (view.autoresizesSubviews) ? @"YES" : @"NO"];
 			[objectString appendFormat:@"    contentMode: %@ | ", [self describeProperty:@"contentMode" value:[NSNumber numberWithInt:view.contentMode]]];
 			[objectString appendFormat:@"contentStretch: %@\n", NSStringFromCGRect(view.contentStretch)];
@@ -1539,7 +1539,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
 	NSMutableString *outputString = [NSMutableString string];
 	
 	// warn about accessibility inspector if the element count is zero
-	NSUInteger count = [object accessibilityElementCount];
+	NSInteger count = [object accessibilityElementCount];
 	if (count == 0)
 		[outputString appendString:@"\n\n** Warning: Logging accessibility properties requires Accessibility Inspector: Settings.app -> General -> Accessibility\n"];
 	
@@ -1560,7 +1560,7 @@ id UITextInputTraits_valueForKey(id self, SEL _cmd, NSString *key)
     int numClasses = objc_getClassList(NULL, 0);
     Class *classes = NULL;
 	
-    classes = malloc(sizeof(Class) * numClasses);
+    classes = malloc(sizeof(Class) * (size_t)numClasses);
     numClasses = objc_getClassList(classes, numClasses);
 	
     NSMutableArray *result = [NSMutableArray array];
